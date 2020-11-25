@@ -1,0 +1,28 @@
+{
+  "name": "express-mesto",
+  "version": "0.0.1",
+  "description": "server for mesto-project",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikelm/express-mesto.git"
+  },
+  "author": "Nikolay Elmanov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nikelm/express-mesto/issues"
+  },
+  "homepage": "https://github.com/nikelm/express-mesto#readme",
+  "devDependencies": {
+    "eslint": "^7.14.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "nodemon": "^2.0.6"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
