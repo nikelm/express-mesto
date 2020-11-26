@@ -33,8 +33,14 @@ app.get('/users/:id', (req, res) => {
       console.log(err);
       return;
     }
-    console.log(data);
-    res.type('json').send(req.params.id);
+    const users = JSON.parse(data);
+    const user = users.find((myUser) => myUser._id === req.params.id);
+    if (user) {
+      res.send(user);
+    } else {
+      const message = { message: 'Нет пользователя с таким id' };
+      res.status(404).type('json').send(message);
+    }
   });
 });
 
