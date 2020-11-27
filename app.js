@@ -1,12 +1,17 @@
 const express = require('express');
-const fs = require('fs');
+const path = require('path');
+const usersRouter = require('./routes/users');
+const cardsRouter = require('./routes/cards');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
 
-app.use(express.static(`${__dirname}/public`));
+app.use(express.static(path.join(__dirname, '/public')));
+app.use('/public/users', usersRouter);
+app.use('/cards', cardsRouter);
 
+/*
 app.get('/users', (req, res) => {
   fs.readFile('user.json', { encoding: 'utf8' }, (err, data) => {
     if (err) {
@@ -43,7 +48,7 @@ app.get('/users/:id', (req, res) => {
     }
   });
 });
-
+*/
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
