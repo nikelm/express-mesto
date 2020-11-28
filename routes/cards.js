@@ -1,14 +1,6 @@
-const cardsRouter = require('express').Router();
-const fs = require('fs');
+const router = require('express').Router();
+const getCards = require('../controllers/cards');
 
-cardsRouter.get('/users', (req, res) => {
-  fs.readFile('./data/cards.json', { encoding: 'utf8' }, (err, data) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    res.type('json').send(data);
-  });
-});
+router.get('/', getCards);
 
-module.exports = cardsRouter;
+module.exports = router;

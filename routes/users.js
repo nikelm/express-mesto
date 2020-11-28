@@ -1,14 +1,7 @@
-const usersRouter = require('express').Router();
-const fs = require('fs');
+const router = require('express').Router();
+const { getUsers, getProfile } = require('../controllers/users');
 
-usersRouter.get('/users', (req, res) => {
-  fs.readFile('./data/user.json', { encoding: 'utf8' }, (err, data) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    res.type('json').send(data);
-  });
-});
+router.get('/', getUsers);
+router.get('/:id', getProfile);
 
-module.exports = usersRouter;
+module.exports = router;
