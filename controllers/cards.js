@@ -9,9 +9,8 @@ const createCard = (req, res) => {
     .then((count) => Card.create({ id: count, owner: req.user._id, ...req.body })
       .then((card) => res.status(200).send(card))
       .catch((err) => {
-        if (err.name === 'ValidationError') {
-          const ERROR_CODE = 400;
-          return res.status(ERROR_CODE).send({ message: 'Вы указали некорректные данные' });
+        if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
+          return res.status(400).send({ message: 'Вы указали некорректные данные' });
         }
         return res.status(500).send({ message: 'На сервере произошла ошибка' });
       }));
@@ -21,12 +20,16 @@ const deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.id)
     .then((card) => {
       if (!card) {
-        const ERROR_CODE = 404;
-        return res.status(ERROR_CODE).send({ message: 'Нет карточки с таким id' });
+        return res.status(404).send({ message: 'Нет карточки с таким id' });
       }
       return res.status(200).send(card);
     })
-    .catch((err) => res.status(500).send(err, { message: 'На сервере произошла ошибка' }));
+    .catch((err) => {
+      if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
+        return res.status(404).send({ message: 'Нет карточки с таким id' });
+      }
+      return res.status(500).send({ message: 'На сервере произошла ошибка' });
+    });
 };
 
 const likeCard = (req, res) => {
@@ -36,7 +39,12 @@ const likeCard = (req, res) => {
     { new: true },
   )
     .then((card) => res.status(200).send(card))
-    .catch((err) => res.status(500).send(err, { message: 'На сервере произошла ошибка' }));
+    .catch((err) => {
+      if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
+        return res.status(404).send({ message: 'Нет карточки с таким id' });
+      }
+      return res.status(500).send({ message: 'На сервере произошла ошибка' });
+    });
 };
 
 const dislikeCard = (req, res) => {
@@ -46,7 +54,12 @@ const dislikeCard = (req, res) => {
     { new: true },
   )
     .then((card) => res.status(200).send(card))
-    .catch((err) => res.status(500).send(err, { message: 'На сервере произошла ошибка' }));
+    .catch((err) => {
+      if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
+        return res.status(404).send({ message: 'Нет карточки с таким id' });
+      }
+      return res.status(500).send({ message: 'На сервере произошла ошибка' });
+    });
 };
 
 module.exports = {
