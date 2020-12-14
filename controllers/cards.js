@@ -5,15 +5,14 @@ const getCards = (req, res) => Card.find({})
   .catch((err) => res.status(500).send(err, { message: 'На сервере произошла ошибка' }));
 
 const createCard = (req, res) => {
-  Card.countDocuments()
-    .then((count) => Card.create({ id: count, owner: req.user._id, ...req.body })
-      .then((card) => res.status(200).send(card))
-      .catch((err) => {
-        if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
-          return res.status(400).send({ message: 'Вы указали некорректные данные' });
-        }
-        return res.status(500).send({ message: 'На сервере произошла ошибка' });
-      }));
+  Card.create({ owner: req.user._id, ...req.body })
+    .then((card) => res.status(200).send(card))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(400).send({ message: 'Вы указали некорректные данные' });
+      }
+      return res.status(500).send({ message: 'На сервере произошла ошибка' });
+    });
 };
 
 const deleteCard = (req, res) => {

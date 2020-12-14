@@ -18,10 +18,14 @@ const getProfile = (req, res) => User.findById(req.params.id)
     return res.status(500).send({ message: 'На сервере произошла ошибка' });
   });
 
-const createUser = (req, res) => User.create(req.body)
-  .then((users) => res.status(200).send(users))
+const createUser = (req, res) => User.create({
+  name: req.body.name,
+  about: req.body.about,
+  avatar: req.body.avatar,
+})
+  .then((user) => res.status(200).send(user))
   .catch((err) => {
-    if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
+    if (err.name === 'ValidationError') {
       return res.status(400).send({ message: 'Вы указали некорректные данные' });
     }
     return res.status(500).send({ message: 'На сервере произошла ошибка' });
@@ -32,7 +36,12 @@ const updateProfile = (req, res) => {
     new: true,
     runValidators: true,
   })
-    .then((users) => res.status(200).send(users))
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: 'Нет пользователя с таким id' });
+      }
+      return res.status(200).send(user);
+    })
     .catch((err) => {
       if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
         return res.status(400).send({ message: 'Вы указали некорректные данные' });
@@ -46,7 +55,12 @@ const updateAvatar = (req, res) => {
     new: true,
     runValidators: true,
   })
-    .then((users) => res.status(200).send(users))
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: 'Нет пользователя с таким id' });
+      }
+      return res.status(200).send(user);
+    })
     .catch((err) => {
       if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
         return res.status(400).send({ message: 'Вы указали некорректные данные' });
