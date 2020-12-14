@@ -38,7 +38,12 @@ const likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true },
   )
-    .then((card) => res.status(200).send(card))
+    .then((card) => {
+      if (!card) {
+        return res.status(404).send({ message: 'Нет карточки с таким id' });
+      }
+      return res.status(200).send(card);
+    })
     .catch((err) => {
       if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
         return res.status(404).send({ message: 'Нет карточки с таким id' });
@@ -53,7 +58,12 @@ const dislikeCard = (req, res) => {
     { $pull: { likes: req.user._id } }, // убрать _id из массива
     { new: true },
   )
-    .then((card) => res.status(200).send(card))
+    .then((card) => {
+      if (!card) {
+        return res.status(404).send({ message: 'Нет карточки с таким id' });
+      }
+      return res.status(200).send(card);
+    })
     .catch((err) => {
       if ((err.name === 'ValidationError') || (err.name === 'CastError')) {
         return res.status(404).send({ message: 'Нет карточки с таким id' });
